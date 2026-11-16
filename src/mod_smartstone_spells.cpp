@@ -26,6 +26,8 @@
  *         lives at a non-zero effect index, hence EFFECT_FIRST_FOUND below)
  *       1 - Shadowform              (spell id 15473)
  *
+ *   Moonkin Form also re-applies its override when recast while active.
+ *
  *   In BG / arena the override is suppressed — the engine's default
  *   model is left in place.
  */
@@ -126,7 +128,7 @@ class spell_smartstone_form_display_override : public AuraScript
         if (!player)
             return;
 
-        if (GetSpellInfo()->Id == 24858)
+        if (GetSpellInfo()->Id == SPELL_MOONKIN_FORM)
         {
             player->RemoveAurasDueToSpell(SPELL_ASTRAL_FORM_VISUAL);
             return;
@@ -153,6 +155,14 @@ class spell_smartstone_form_display_override : public AuraScript
         AfterEffectRemove += AuraEffectRemoveFn(
             spell_smartstone_form_display_override::HandleRemove,
             EFFECT_FIRST_FOUND, SPELL_AURA_MOD_SHAPESHIFT, AURA_EFFECT_HANDLE_REAL);
+
+        // Recasting Moonkin Form refreshes the aura in REAPPLY mode, and the
+        // core's shapeshift handler puts the default form model back.
+        if (m_scriptSpellId == SPELL_MOONKIN_FORM)
+            AfterEffectApply += AuraEffectApplyFn(
+                spell_smartstone_form_display_override::HandleApply,
+                EFFECT_FIRST_FOUND, SPELL_AURA_MOD_SHAPESHIFT,
+                AURA_EFFECT_HANDLE_REAPPLY);
     }
 };
 

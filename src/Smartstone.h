@@ -83,6 +83,8 @@ enum DruidFormSlot
 constexpr uint32 FORM_DISPLAY_OWN_MODEL   = 0xFFFFFFFF;
 constexpr uint32 SPELL_ASTRAL_FORM_VISUAL = 22650; // Ghost Visual, hidden cosmetic aura
 
+constexpr uint32 SPELL_MOONKIN_FORM = 24858;
+
 constexpr uint32 SPELL_GHOST_WOLF = 2645;
 
 enum ShamanFormSlot
